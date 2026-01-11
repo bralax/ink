@@ -7,15 +7,17 @@ import autoBind from 'auto-bind';
 import signalExit from 'signal-exit';
 import patchConsole from 'patch-console';
 import {type FiberRoot} from 'react-reconciler';
-import Yoga from 'yoga-layout';
 import reconciler from './reconciler.js';
 import render from './renderer.js';
 import * as dom from './dom.js';
 import logUpdate, {type LogUpdate} from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
+import { getYoga } from './yoga.js';
 
 const noop = () => {};
+
+
 
 export type Options = {
 	stdout: NodeJS.WriteStream;
@@ -47,7 +49,7 @@ export default class Ink {
 		autoBind(this);
 
 		this.options = options;
-		this.rootNode = dom.createNode('ink-root');
+		this.rootNode = dom.createNode('ink-root', getYoga());
 		this.rootNode.onComputeLayout = this.calculateLayout;
 
 		this.rootNode.onRender = options.debug
@@ -134,7 +136,7 @@ export default class Ink {
 		this.rootNode.yogaNode!.calculateLayout(
 			undefined,
 			undefined,
-			Yoga.DIRECTION_LTR,
+			getYoga()?.DIRECTION_LTR,
 		);
 	};
 

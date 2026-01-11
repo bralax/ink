@@ -2,7 +2,9 @@
 import {type Boxes, type BoxStyle} from 'cli-boxes';
 import {type LiteralUnion} from 'type-fest';
 import {type ForegroundColorName} from 'ansi-styles'; // Note: We import directly from `ansi-styles` to avoid a bug in TypeScript.
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import type {Node as YogaNode} from 'yoga-layout/load';
+import { getYoga } from './yoga.js';
+
 
 export type Styles = {
 	readonly textWrap?:
@@ -308,69 +310,69 @@ const applyPositionStyles = (node: YogaNode, style: Styles): void => {
 	if ('position' in style) {
 		node.setPositionType(
 			style.position === 'absolute'
-				? Yoga.POSITION_TYPE_ABSOLUTE
-				: Yoga.POSITION_TYPE_RELATIVE,
+				? getYoga()?.POSITION_TYPE_ABSOLUTE!
+				: getYoga()?.POSITION_TYPE_RELATIVE!,
 		);
 	}
 };
 
 const applyMarginStyles = (node: YogaNode, style: Styles): void => {
 	if ('margin' in style) {
-		node.setMargin(Yoga.EDGE_ALL, style.margin ?? 0);
+		node.setMargin(getYoga()?.EDGE_ALL!, style.margin ?? 0);
 	}
 
 	if ('marginX' in style) {
-		node.setMargin(Yoga.EDGE_HORIZONTAL, style.marginX ?? 0);
+		node.setMargin(getYoga()?.EDGE_HORIZONTAL!, style.marginX ?? 0);
 	}
 
 	if ('marginY' in style) {
-		node.setMargin(Yoga.EDGE_VERTICAL, style.marginY ?? 0);
+		node.setMargin(getYoga()?.EDGE_VERTICAL!, style.marginY ?? 0);
 	}
 
 	if ('marginLeft' in style) {
-		node.setMargin(Yoga.EDGE_START, style.marginLeft || 0);
+		node.setMargin(getYoga()?.EDGE_START!, style.marginLeft || 0);
 	}
 
 	if ('marginRight' in style) {
-		node.setMargin(Yoga.EDGE_END, style.marginRight || 0);
+		node.setMargin(getYoga()?.EDGE_END!, style.marginRight || 0);
 	}
 
 	if ('marginTop' in style) {
-		node.setMargin(Yoga.EDGE_TOP, style.marginTop || 0);
+		node.setMargin(getYoga()?.EDGE_TOP!, style.marginTop || 0);
 	}
 
 	if ('marginBottom' in style) {
-		node.setMargin(Yoga.EDGE_BOTTOM, style.marginBottom || 0);
+		node.setMargin(getYoga()?.EDGE_BOTTOM!, style.marginBottom || 0);
 	}
 };
 
 const applyPaddingStyles = (node: YogaNode, style: Styles): void => {
 	if ('padding' in style) {
-		node.setPadding(Yoga.EDGE_ALL, style.padding ?? 0);
+		node.setPadding(getYoga()?.EDGE_ALL!, style.padding ?? 0);
 	}
 
 	if ('paddingX' in style) {
-		node.setPadding(Yoga.EDGE_HORIZONTAL, style.paddingX ?? 0);
+		node.setPadding(getYoga()?.EDGE_HORIZONTAL!, style.paddingX ?? 0);
 	}
 
 	if ('paddingY' in style) {
-		node.setPadding(Yoga.EDGE_VERTICAL, style.paddingY ?? 0);
+		node.setPadding(getYoga()?.EDGE_VERTICAL!, style.paddingY ?? 0);
 	}
 
 	if ('paddingLeft' in style) {
-		node.setPadding(Yoga.EDGE_LEFT, style.paddingLeft || 0);
+		node.setPadding(getYoga()?.EDGE_LEFT!, style.paddingLeft || 0);
 	}
 
 	if ('paddingRight' in style) {
-		node.setPadding(Yoga.EDGE_RIGHT, style.paddingRight || 0);
+		node.setPadding(getYoga()?.EDGE_RIGHT!, style.paddingRight || 0);
 	}
 
 	if ('paddingTop' in style) {
-		node.setPadding(Yoga.EDGE_TOP, style.paddingTop || 0);
+		node.setPadding(getYoga()?.EDGE_TOP!, style.paddingTop || 0);
 	}
 
 	if ('paddingBottom' in style) {
-		node.setPadding(Yoga.EDGE_BOTTOM, style.paddingBottom || 0);
+		node.setPadding(getYoga()?.EDGE_BOTTOM!, style.paddingBottom || 0);
 	}
 };
 
@@ -387,33 +389,33 @@ const applyFlexStyles = (node: YogaNode, style: Styles): void => {
 
 	if ('flexWrap' in style) {
 		if (style.flexWrap === 'nowrap') {
-			node.setFlexWrap(Yoga.WRAP_NO_WRAP);
+			node.setFlexWrap(getYoga()?.WRAP_NO_WRAP!);
 		}
 
 		if (style.flexWrap === 'wrap') {
-			node.setFlexWrap(Yoga.WRAP_WRAP);
+			node.setFlexWrap(getYoga()?.WRAP_WRAP!);
 		}
 
 		if (style.flexWrap === 'wrap-reverse') {
-			node.setFlexWrap(Yoga.WRAP_WRAP_REVERSE);
+			node.setFlexWrap(getYoga()?.WRAP_WRAP_REVERSE!);
 		}
 	}
 
 	if ('flexDirection' in style) {
 		if (style.flexDirection === 'row') {
-			node.setFlexDirection(Yoga.FLEX_DIRECTION_ROW);
+			node.setFlexDirection(getYoga()?.FLEX_DIRECTION_ROW!);
 		}
 
 		if (style.flexDirection === 'row-reverse') {
-			node.setFlexDirection(Yoga.FLEX_DIRECTION_ROW_REVERSE);
+			node.setFlexDirection(getYoga()?.FLEX_DIRECTION_ROW_REVERSE!);
 		}
 
 		if (style.flexDirection === 'column') {
-			node.setFlexDirection(Yoga.FLEX_DIRECTION_COLUMN);
+			node.setFlexDirection(getYoga()?.FLEX_DIRECTION_COLUMN!);
 		}
 
 		if (style.flexDirection === 'column-reverse') {
-			node.setFlexDirection(Yoga.FLEX_DIRECTION_COLUMN_REVERSE);
+			node.setFlexDirection(getYoga()?.FLEX_DIRECTION_COLUMN_REVERSE!);
 		}
 	}
 
@@ -430,63 +432,63 @@ const applyFlexStyles = (node: YogaNode, style: Styles): void => {
 
 	if ('alignItems' in style) {
 		if (style.alignItems === 'stretch' || !style.alignItems) {
-			node.setAlignItems(Yoga.ALIGN_STRETCH);
+			node.setAlignItems(getYoga()?.ALIGN_STRETCH!);
 		}
 
 		if (style.alignItems === 'flex-start') {
-			node.setAlignItems(Yoga.ALIGN_FLEX_START);
+			node.setAlignItems(getYoga()?.ALIGN_FLEX_START!);
 		}
 
 		if (style.alignItems === 'center') {
-			node.setAlignItems(Yoga.ALIGN_CENTER);
+			node.setAlignItems(getYoga()?.ALIGN_CENTER!);
 		}
 
 		if (style.alignItems === 'flex-end') {
-			node.setAlignItems(Yoga.ALIGN_FLEX_END);
+			node.setAlignItems(getYoga()?.ALIGN_FLEX_END!);
 		}
 	}
 
 	if ('alignSelf' in style) {
 		if (style.alignSelf === 'auto' || !style.alignSelf) {
-			node.setAlignSelf(Yoga.ALIGN_AUTO);
+			node.setAlignSelf(getYoga()?.ALIGN_AUTO!);
 		}
 
 		if (style.alignSelf === 'flex-start') {
-			node.setAlignSelf(Yoga.ALIGN_FLEX_START);
+			node.setAlignSelf(getYoga()?.ALIGN_FLEX_START!);
 		}
 
 		if (style.alignSelf === 'center') {
-			node.setAlignSelf(Yoga.ALIGN_CENTER);
+			node.setAlignSelf(getYoga()?.ALIGN_CENTER!);
 		}
 
 		if (style.alignSelf === 'flex-end') {
-			node.setAlignSelf(Yoga.ALIGN_FLEX_END);
+			node.setAlignSelf(getYoga()?.ALIGN_FLEX_END!);
 		}
 	}
 
 	if ('justifyContent' in style) {
 		if (style.justifyContent === 'flex-start' || !style.justifyContent) {
-			node.setJustifyContent(Yoga.JUSTIFY_FLEX_START);
+			node.setJustifyContent(getYoga()?.JUSTIFY_FLEX_START!);
 		}
 
 		if (style.justifyContent === 'center') {
-			node.setJustifyContent(Yoga.JUSTIFY_CENTER);
+			node.setJustifyContent(getYoga()?.JUSTIFY_CENTER!);
 		}
 
 		if (style.justifyContent === 'flex-end') {
-			node.setJustifyContent(Yoga.JUSTIFY_FLEX_END);
+			node.setJustifyContent(getYoga()?.JUSTIFY_FLEX_END!);
 		}
 
 		if (style.justifyContent === 'space-between') {
-			node.setJustifyContent(Yoga.JUSTIFY_SPACE_BETWEEN);
+			node.setJustifyContent(getYoga()?.JUSTIFY_SPACE_BETWEEN!);
 		}
 
 		if (style.justifyContent === 'space-around') {
-			node.setJustifyContent(Yoga.JUSTIFY_SPACE_AROUND);
+			node.setJustifyContent(getYoga()?.JUSTIFY_SPACE_AROUND!);
 		}
 
 		if (style.justifyContent === 'space-evenly') {
-			node.setJustifyContent(Yoga.JUSTIFY_SPACE_EVENLY);
+			node.setJustifyContent(getYoga()?.JUSTIFY_SPACE_EVENLY!);
 		}
 	}
 };
@@ -532,7 +534,7 @@ const applyDimensionStyles = (node: YogaNode, style: Styles): void => {
 const applyDisplayStyles = (node: YogaNode, style: Styles): void => {
 	if ('display' in style) {
 		node.setDisplay(
-			style.display === 'flex' ? Yoga.DISPLAY_FLEX : Yoga.DISPLAY_NONE,
+			style.display === 'flex' ? getYoga()?.DISPLAY_FLEX! : getYoga()?.DISPLAY_NONE!,
 		);
 	}
 };
@@ -542,34 +544,34 @@ const applyBorderStyles = (node: YogaNode, style: Styles): void => {
 		const borderWidth = style.borderStyle ? 1 : 0;
 
 		if (style.borderTop !== false) {
-			node.setBorder(Yoga.EDGE_TOP, borderWidth);
+			node.setBorder(getYoga()?.EDGE_TOP!, borderWidth);
 		}
 
 		if (style.borderBottom !== false) {
-			node.setBorder(Yoga.EDGE_BOTTOM, borderWidth);
+			node.setBorder(getYoga()?.EDGE_BOTTOM!, borderWidth);
 		}
 
 		if (style.borderLeft !== false) {
-			node.setBorder(Yoga.EDGE_LEFT, borderWidth);
+			node.setBorder(getYoga()?.EDGE_LEFT!, borderWidth);
 		}
 
 		if (style.borderRight !== false) {
-			node.setBorder(Yoga.EDGE_RIGHT, borderWidth);
+			node.setBorder(getYoga()?.EDGE_RIGHT!, borderWidth);
 		}
 	}
 };
 
 const applyGapStyles = (node: YogaNode, style: Styles): void => {
 	if ('gap' in style) {
-		node.setGap(Yoga.GUTTER_ALL, style.gap ?? 0);
+		node.setGap(getYoga()?.GUTTER_ALL!, style.gap ?? 0);
 	}
 
 	if ('columnGap' in style) {
-		node.setGap(Yoga.GUTTER_COLUMN, style.columnGap ?? 0);
+		node.setGap(getYoga()?.GUTTER_COLUMN!, style.columnGap ?? 0);
 	}
 
 	if ('rowGap' in style) {
-		node.setGap(Yoga.GUTTER_ROW, style.rowGap ?? 0);
+		node.setGap(getYoga()?.GUTTER_ROW!, style.rowGap ?? 0);
 	}
 };
 

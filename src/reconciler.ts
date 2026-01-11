@@ -1,7 +1,7 @@
-import process from 'node:process';
 import createReconciler from 'react-reconciler';
 import {DefaultEventPriority} from 'react-reconciler/constants.js';
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import type {Node as YogaNode} from 'yoga-layout/load';
+
 import {
 	createTextNode,
 	appendChildNode,
@@ -18,14 +18,13 @@ import {
 } from './dom.js';
 import applyStyles, {type Styles} from './styles.js';
 import {type OutputTransformer} from './render-node-to-output.js';
+import { getYoga } from './yoga.js';
 
 // We need to conditionally perform devtools connection to avoid
 // accidentally breaking other third-party code.
 // See https://github.com/vadimdemedes/ink/issues/384
-if (process.env['DEV'] === 'true') {
-	try {
-		await import('./devtools.js');
-	} catch (error: any) {
+if (process.env["DEV"] === 'true') {
+	import('./devtools.js').catch(error => {
 		if (error.code === 'ERR_MODULE_NOT_FOUND') {
 			console.warn(
 				`
@@ -41,7 +40,7 @@ $ npm install --save-dev react-devtools-core
 			// eslint-disable-next-line @typescript-eslint/only-throw-error
 			throw error;
 		}
-	}
+	})
 }
 
 type AnyObject = Record<string, unknown>;
@@ -208,10 +207,10 @@ export default createReconciler<
 	},
 	getPublicInstance: instance => instance,
 	hideInstance(node) {
-		node.yogaNode?.setDisplay(Yoga.DISPLAY_NONE);
+		node.yogaNode?.setDisplay(getYoga()?.DISPLAY_NONE!);
 	},
 	unhideInstance(node) {
-		node.yogaNode?.setDisplay(Yoga.DISPLAY_FLEX);
+		node.yogaNode?.setDisplay(getYoga()?.DISPLAY_FLEX!);
 	},
 	appendInitialChild: appendChildNode,
 	appendChild: appendChildNode,

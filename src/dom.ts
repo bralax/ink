@@ -1,4 +1,4 @@
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import type {Yoga, Node as YogaNode} from 'yoga-layout/load';
 import measureText from './measure-text.js';
 import {type Styles} from './styles.js';
 import wrapText from './wrap-text.js';
@@ -53,14 +53,14 @@ export type DOMNode<T = {nodeName: NodeNames}> = T extends {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type DOMNodeAttribute = boolean | string | number;
 
-export const createNode = (nodeName: ElementNames): DOMElement => {
+export const createNode = (nodeName: ElementNames, yoga?: Yoga): DOMElement => {
 	const node: DOMElement = {
 		nodeName,
 		style: {},
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
-		yogaNode: nodeName === 'ink-virtual-text' ? undefined : Yoga.Node.create(),
+		yogaNode: nodeName === 'ink-virtual-text' ? undefined : yoga?.Node.create(),
 	};
 
 	if (nodeName === 'ink-text') {
