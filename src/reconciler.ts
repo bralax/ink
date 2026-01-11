@@ -157,7 +157,7 @@ export default createReconciler<
 				? 'ink-virtual-text'
 				: originalType;
 
-		const node = createNode(type);
+		const node = createNode(type, getYoga());
 
 		for (const [key, value] of Object.entries(newProps)) {
 			if (key === 'children') {
